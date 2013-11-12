@@ -1,2 +1,2 @@
-symbol-mode
+symbolword-mode
 ===========
