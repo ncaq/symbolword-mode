@@ -6,6 +6,6 @@
 
 (defun backward-symbolword ()
   (interactive)
-  (skip-syntax-backward (get-syntax-from-buffer)))
+  (skip-syntax-backward (get-syntax-from-buffer-backward)))
 
 (provide 'ward-symbolword)
