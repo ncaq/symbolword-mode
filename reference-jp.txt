@@ -1,0 +1,8 @@
+Emacsについてる関数の日本語の説明を書いておく
+書かないと忘れるから
+
+(skip-syntax-forward SYNTAX &optional LIM)
+
+例:(skip-syntax-forward "w")
+指定したSyntaxが続く限り,前に進む.
+後ろに進むbackwardもある
