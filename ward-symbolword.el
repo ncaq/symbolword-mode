@@ -12,6 +12,6 @@
 
 (defun backward-symbolword ()
   (interactive)
-  (backward-symbolword-sub (get-syntax-from-buffer-backward)))
+  (backward-symbolword-sub (get-str-from-buffer-backward)))
 
 (provide 'ward-symbolword)
