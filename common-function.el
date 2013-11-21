@@ -1,3 +1,5 @@
+(eval-when-compile (require 'cl))
+
 (defun unicode-block-type (str)
   (let ((ucsnum (string-to-char str)))
     (cond ((and (>= ucsnum 48)    (<= ucsnum 57))    'numbar)
@@ -38,8 +40,20 @@
 (defun get-str-from-buffer ()
   (buffer-substring-no-properties (point) (+ (point) 1)))
 
+(defun get-str-from-buffer-backward ()
+  (buffer-substring-no-properties (point) (- (point) 1)))
+
+(defun get-str-from-buffer-dif (dif)
+  (buffer-substring-no-properties (+ (point) dif) (+ (point) 1 dif)))
+
+(defun get-str-from-buffer-dif-backward (dif)
+  (buffer-substring-no-properties (- (point) dif) (- (point) 1 dif)))
+
 (defun get-syntax-from-buffer ()
   (char-to-string (char-syntax (string-to-char (get-str-from-buffer)))))
+
+(defun get-syntax-from-buffer-backward ()
+  (char-to-string (char-syntax (string-to-char (get-str-from-buffer-backward)))))
 
 (defun get-unicode-type-from-buffer ()
   (unicode-block-type (get-str-from-buffer)))
@@ -47,36 +61,41 @@
 (defun get-unicode-type-from-buffer-backward ()
   (unicode-block-type (get-str-from-buffer-backward)))
 
-(defun get-str-from-buffer-backward ()
-  (buffer-substring-no-properties (point) (- (point) 1)))
-
-(defun get-syntax-from-buffer-backward ()
-  (char-to-string (char-syntax (string-to-char (get-str-from-buffer-backward)))))
+(defconst *latin*
+  '(number upcase downcase))
 
 (defun div-symbolword-forward (currstr nextstr)
-  "単語を分ける条件(前方方向)"
+  "単語を分けるか?"
   (let ((currtype (unicode-block-type currstr))
 	(nexttype (unicode-block-type nextstr)))
-    (and
-     (not (eq nexttype 'space));次が空白の時は単語を分けない
-     (or
-      (not (equal-syntax currstr nextstr));違う意味の文字なら分ける
-      (not (eq currtype nexttype));Unicode的に違う文字であるなら分ける
-      (and;自分が小文字で,次が大文字である時
+    (cond ;;((eq nexttype 'space) nil);次が空白の時は単語を分けない
+     ((not (equal-syntax currstr nextstr)) t);違う意味の文字なら分ける
+     ((and
+       (not (or
+	     (cl-find currtype *latin*)
+	     (cl-find nexttype *latin*)));ラテン文字以外で,
+       (not (eq currtype nexttype)))
+      t);Unicode的に違う文字であるなら分ける
+     ((and;自分が小文字で,次が大文字である時分ける
        (eq currtype 'downcase)
-       (eq nexttype 'upcase))))))
+       (eq nexttype 'upcase))
+      t))))
 
 (defun div-symbolword-backward (currstr backstr)
-  "単語を分ける条件(後方方向)"
+  "単語を分けるか?(後方バージョン)"
   (let ((currtype (unicode-block-type currstr))
 	(backtype (unicode-block-type backstr)))
-    (and
-     (not (eq backtype 'space));次が空白の時は単語を分けない
-     (or
-      (not (equal-syntax currstr backstr));違う意味の文字なら分ける
-      (not (eq currtype backtype));Unicode的に違う文字であるなら分ける
-      (and;自分が大文字で,次が小文字である時
-       (eq currtype 'upcase)
-       (eq backtype 'downcase))))))
+    (cond ;;((eq backtype 'space) nil);次が空白の時は単語を分けない
+     ((not (equal-syntax currstr backstr)) t);違う意味の文字なら分ける
+     ((and
+       (not (or
+	     (cl-find currtype *latin*)
+	     (cl-find backtype *latin*)));ラテン文字以外で,
+       (not (eq currtype backtype)))
+      t);Unicode的に違う文字であるなら分ける
+     ((and;自分が小文字で,次が大文字である時分ける
+       (eq backtype 'upcase)
+       (eq currtype 'downcase))
+      t))))
 
 (provide 'common-function)
