@@ -1,4 +1,4 @@
-symbolword-mode
+symbolword-mode.Emacsの単語判定を控えめにする
 ===========
 This code can't be setting.
 設定はできません.
