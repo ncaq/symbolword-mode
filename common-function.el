@@ -10,7 +10,9 @@
 	    (= ucsnum 8203)
 	    (= ucsnum 8288)
 	    (= ucsnum 12288)
-	    (= ucsnum 65279))
+	    (= ucsnum 65279)
+	    (= ucsnum 9);tab
+	    )
 	   'space)
 	  ((= ucsnum 10) 'newline)
 	  ((and (>= ucsnum 12352) (<= ucsnum 12447)) 'hiragana)
@@ -36,39 +38,45 @@
 (defun get-str-from-buffer ()
   (buffer-substring-no-properties (point) (+ (point) 1)))
 
-(defun get-str-from-buffer-backward ()
-  (buffer-substring-no-properties (point) (- (point) 1)))
-
 (defun get-syntax-from-buffer ()
   (char-to-string (char-syntax (string-to-char (get-str-from-buffer)))))
+
+(defun get-unicode-type-from-buffer ()
+  (unicode-block-type (get-str-from-buffer)))
+
+(defun get-unicode-type-from-buffer-backward ()
+  (unicode-block-type (get-str-from-buffer-backward)))
+
+(defun get-str-from-buffer-backward ()
+  (buffer-substring-no-properties (point) (- (point) 1)))
 
 (defun get-syntax-from-buffer-backward ()
   (char-to-string (char-syntax (string-to-char (get-str-from-buffer-backward)))))
 
 (defun div-symbolword-forward (currstr nextstr)
   "単語を分ける条件(前方方向)"
-  (let ((curr (unicode-block-type currstr))
-	(next (unicode-block-type nextstr)))
+  (let ((currtype (unicode-block-type currstr))
+	(nexttype (unicode-block-type nextstr)))
     (and
-     (not (eq next 'space));次が空白の時は単語を分けない
+     (not (eq nexttype 'space));次が空白の時は単語を分けない
      (or
       (not (equal-syntax currstr nextstr));違う意味の文字なら分ける
-      (not (eq curr next));Unicode的に違う文字であるなら分ける
+      (not (eq currtype nexttype));Unicode的に違う文字であるなら分ける
       (and;自分が小文字で,次が大文字である時
-       (eq curr 'downcase)
-       (eq next 'upcase))))))
+       (eq currtype 'downcase)
+       (eq nexttype 'upcase))))))
 
 (defun div-symbolword-backward (currstr backstr)
-  "単語を分ける条件(前方方向)"
-  (let ((curr (unicode-block-type currstr))
-	(back (unicode-block-type backstr)))
+  "単語を分ける条件(後方方向)"
+  (let ((currtype (unicode-block-type currstr))
+	(backtype (unicode-block-type backstr)))
     (and
-     (not (eq back 'space));次が空白の時は単語を分けない
+     (not (eq backtype 'space));次が空白の時は単語を分けない
      (or
       (not (equal-syntax currstr backstr));違う意味の文字なら分ける
-      (not (eq curr back));Unicode的に違う文字であるなら分ける
+      (not (eq currtype backtype));Unicode的に違う文字であるなら分ける
       (and;自分が大文字で,次が小文字である時
-       (eq curr 'upcase)
-       (eq back 'downcase))))))
+       (eq currtype 'upcase)
+       (eq backtype 'downcase))))))
 
 (provide 'common-function)
