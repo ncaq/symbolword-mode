@@ -68,8 +68,7 @@
   "単語を分けるか?"
   (let ((currtype (unicode-block-type currstr))
 	(nexttype (unicode-block-type nextstr)))
-    (and (not (eq nexttype 'space));次が空白の時は単語を分けない
-	 (or (not (equal-syntax currstr nextstr));違う意味の文字なら分ける
+    (and (or (not (equal-syntax currstr nextstr));違う意味の文字なら分ける
 	     (and (not (or
 			(cl-find currtype *latin*)
 			(cl-find nexttype *latin*)));ラテン文字以外で,
@@ -82,8 +81,7 @@
   "単語を分けるか?"
   (let ((currtype (unicode-block-type currstr))
 	(backtype (unicode-block-type backstr)))
-    (and (not (eq backtype 'space));次が空白の時は単語を分けない
-	 (or (not (equal-syntax currstr backstr));違う意味の文字なら分ける
+    (and (or (not (equal-syntax currstr backstr));違う意味の文字なら分ける
 	     (and (not (or
 			(cl-find currtype *latin*)
 			(cl-find backtype *latin*)));ラテン文字以外で,
