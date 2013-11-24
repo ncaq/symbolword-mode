@@ -20,6 +20,6 @@
 (define-key symbolword-mode-map [remap kill-word] 'kill-symbolword)
 (define-key symbolword-mode-map [remap backward-kill-word] 'backward-kill-symbolword)
 
-(easy-mmode-define-minor-mode symbolword-mode "Grab keys" t "symbolword" symbolword-mode-map)
+(easy-mmode-define-minor-mode symbolword-mode "Grab keys" t "SW" symbolword-mode-map)
 
 (provide 'symbolword-mode)
