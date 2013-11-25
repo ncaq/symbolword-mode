@@ -4,7 +4,6 @@
 
 (defun kill-symbolword ()
   (interactive)
-  (c-hungry-delete-forward)
   (kill-forward-chars (kill-symbolword-size (get-str-from-buffer) 1)))
 
 (defun kill-symbolword-size (curr num)
@@ -15,7 +14,6 @@
 
 (defun backward-kill-symbolword ()
   (interactive)
-  (c-hungry-delete-backwards)
   (kill-backward-chars (backward-kill-symbolword-size (get-str-from-buffer-backward) 1)))
 
 (defun backward-kill-symbolword-size (curr num)
