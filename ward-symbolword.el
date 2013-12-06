@@ -1,5 +1,4 @@
 (require 'common-function)
-(require 'thingatpt)
 
 (defun forward-symbolword ()
   (interactive)
