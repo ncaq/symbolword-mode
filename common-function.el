@@ -1,5 +1,3 @@
-(eval-when-compile (require 'cl-lib))
-
 (defun unicode-block-type (str)
   (let ((ucsnum (string-to-char str)))
     (cond ((and (>= ucsnum 48)    (<= ucsnum 57))    'numbar)
@@ -70,9 +68,9 @@
       (let ((currtype (unicode-block-type currstr))
 	    (nexttype (unicode-block-type nextstr)))
 	(and (or (not (equal-syntax currstr nextstr));違う意味の文字なら分ける
-		 (and (not (or
-			    (cl-find currtype *latin*)
-			    (cl-find nexttype *latin*)));ラテン文字以外で,
+		 (and (not (and
+			    (memq currtype *latin*)
+			    (memq nexttype *latin*)));ラテン文字以外で,
 		      (not (eq currtype nexttype)));Unicode的に違う文字であるなら分ける
 		 (and;自分が小文字で,次が大文字である時分ける
 		  (eq currtype 'downcase)
@@ -84,9 +82,9 @@
       (let ((currtype (unicode-block-type currstr))
 	    (backtype (unicode-block-type backstr)))
 	(and (or (not (equal-syntax currstr backstr));違う意味の文字なら分ける
-		 (and (not (or
-			    (cl-find currtype *latin*)
-			    (cl-find backtype *latin*)));ラテン文字以外で,
+		 (and (not (and
+			    (memq currtype *latin*)
+			    (memq backtype *latin*)));ラテン文字以外で,
 		      (not (eq currtype backtype)));Unicode的に違う文字であるなら分ける
 		 (and;自分が小文字で,次が大文字である時分ける
 		  (eq currtype 'upcase)
