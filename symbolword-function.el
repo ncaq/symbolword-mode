@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t -*-
 (defun unicode-block-type (str)
   "Unicode文字をある程度のカテゴリに分類"
   (let ((ucsnum (string-to-char str)))

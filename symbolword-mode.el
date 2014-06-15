@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t -*-
 ;; Key     Word oriented command      Symbolword oriented command
 ;; ============================================================
 ;; M-f     `forward-word'             `forward-symbolword'

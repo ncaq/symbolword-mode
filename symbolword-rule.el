@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t -*-
 (require 'symbolword-function)
 
 ;;単語分け条件
