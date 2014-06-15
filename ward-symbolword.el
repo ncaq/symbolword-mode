@@ -1,3 +1,4 @@
+;; -*- lexical-binding: t -*-
 (require 'symbolword-function)
 (require 'symbolword-rule)
 
