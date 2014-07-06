@@ -11,7 +11,9 @@
      (or
       (and
        (not (or ;without
-             (eq left-class 'space)
+             (and
+              (eq left-class 'space)
+              (eq curr-class 'space))
              (and
               (eq left-class 'upper-case)
               (eq curr-class 'lower-case))
