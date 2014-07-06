@@ -1,60 +1,62 @@
 ;; -*- lexical-binding: t -*-
-(require 'symbolword-function)
+;; pure
 
-;;単語分け条件
-;;left 現在 right 次
-;;(_ 空白)
-;;(改行 改行でない) ← backward逆
-;;(aUnicodeTypeの文字 空白でないbUnicodeTypeの文字) ← ただしラテン文字の大文字小文字は同じものとする
-;;(aSyntax bSyntax)
-;;(ラテン小文字 ラテン大文字) ← backward逆
-
-(defun div-symbolword-forward (currstr nextstr)
-  "単語を分けるか?"
-  (and
-   (stringp currstr)
-   (stringp nextstr)
-   (let ((currtype (unicode-block-type currstr))
-	 (nexttype (unicode-block-type nextstr)))
+(defun symbolword/div-word? (left-char curr-char)
+  "div word rule"
+  (or
+   (not (characterp left-char))
+   (not (characterp curr-char))
+   (let ((left-class (symbolword/unicode-class left-char))
+         (curr-class (symbolword/unicode-class curr-char)))
      (or
-      (eq nexttype 'space)
       (and
+       (not (or ;without
+             (eq left-class 'space)
+             (and
+              (eq left-class 'upper-case)
+              (eq curr-class 'lower-case))
+             (and
+              (eq left-class 'lower-case)
+              (eq curr-class 'lower-case))
+             (and
+              (eq left-class 'upper-case)
+              (eq curr-class 'upper-case))
+             (and
+              (eq left-class 'digit)
+              (eq curr-class 'digit))))
        (not (and
-	     (memq currtype *latin*)
-	     (memq nexttype *latin*)))
-       (and
-	(not (eq nexttype 'space))
-	(not (eq currtype nexttype))))
-      (and
-       (not (eq nexttype 'space))
-       (not (equal-syntax currstr nextstr)))
-      (and
-       (eq currtype 'downcase)
-       (eq nexttype 'upcase))
-      ))))
+             (eq left-class curr-class)
+             (symbolword/equal-syntax? left-char curr-char))))))))
 
-(defun div-symbolword-backward (currstr nextstr)
-  "単語を分けるか?"
-  (and
-   (stringp currstr)
-   (stringp nextstr)
-   (let ((currtype (unicode-block-type currstr))
-	 (nexttype (unicode-block-type nextstr)))
-     (or
-      (eq nexttype 'space)
-      (and
-       (not (and
-	     (memq currtype *latin*)
-	     (memq nexttype *latin*)))
-       (and
-	(not (eq nexttype 'space))
-	(not (eq currtype nexttype))))
-      (and
-       (not (eq nexttype 'space))
-       (not (equal-syntax currstr nextstr)))
-      (and
-       (eq currtype 'upcase)
-       (eq nexttype 'downcase))
-      ))))
+(defun symbolword/equal-syntax? (a b)
+  "Depend on language syntax"
+  (=
+   (char-syntax a)
+   (char-syntax b)))
+
+(defun symbolword/unicode-class (ucs)
+  "XML like unicode character class"
+  (cond
+   ((or
+     (= ucs 32)
+     (= ucs 160)
+     (= ucs 8199)
+     (= ucs 8203)
+     (= ucs 8288)
+     (= ucs 12288)
+     (= ucs 65279)
+     (= ucs 9);tab
+     )
+    'space)
+   ((= ucs 10) 'newline)
+   ((and (>= ucs 48) (<= ucs 57))       'digit)
+   ((and (>= ucs 65) (<= ucs 90))       'upper-case)
+   ((and (>= ucs 97) (<= ucs 122))      'lower-case)
+   ((and (>= ucs 12352) (<= ucs 12447)) 'hiragana)
+   ((and (>= ucs 12448) (<= ucs 12543)) 'katakana)
+   ((and (>= ucs 19968) (<= ucs 40959)) 'kanji)
+   ((and (>= ucs 13312) (<= ucs 19902)) 'kanji)
+   ((and (>= ucs 63744) (<= ucs 64255)) 'kanji)
+   (t 'otherwise)))
 
 (provide 'symbolword-rule)
