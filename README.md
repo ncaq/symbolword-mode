@@ -24,5 +24,5 @@ CamelCaseへの対応はsubword-mode.elに似た動作を.
 コード量はわずかだし.
 
 # License
-GPLv3.
-単にEmacsで動くからGPLv3にしただけなので,著作権表示がなくても訴えたりしません.
+Copyright 2013 ncaq
+GPLv3
