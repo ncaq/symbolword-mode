@@ -1,5 +1,6 @@
 ;; -*- lexical-binding: t -*-
 (require 'symbolword-get)
+(require 'symbolword-ward)
 
 (defun kill-symbolword ()
   (interactive)
