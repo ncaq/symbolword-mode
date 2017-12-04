@@ -1,6 +1,6 @@
 ;; -*- lexical-binding: t -*-
 (require 'ert)
-(require 'symbolword-rule)
+(require 'symbolword-mode)
 
 (ert-deftest sub-word ()
   (should
