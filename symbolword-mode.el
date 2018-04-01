@@ -146,7 +146,7 @@ Argument CURR-CHAR current character."
 (define-key symbolword-mode-map [remap kill-word]          'symbolword-kill)
 (define-key symbolword-mode-map [remap backward-kill-word] 'symbolword-backward-kill)
 
-(easy-mmode-define-minor-mode symbolword-mode "Grab keys" t " SW" symbolword-mode-map)
+(easy-mmode-define-minor-mode symbolword-mode "Change word breaks" t " SW" symbolword-mode-map)
 
 (provide 'symbolword-mode)
 
