@@ -1,5 +1,7 @@
 # symbolword-mode
 
+Make Emacs' word judgment moderate.
+
 Emacsの単語判定を控えめにする.
 
 Emacsの単語の判定が気に入らないので変更するパッケージです.
@@ -16,3 +18,9 @@ Emacsの単語の判定が気に入らないので変更するパッケージで
 単語移動の判定も同様に気に入らなかったので,そういう風に変えました.
 CamelCaseへの対応はsubword-mode.elに似た動作を.
 日本語は適当に処理しています.
+
+# How To
+
+~~~el
+(require 'symbolword-mode)
+~~~
