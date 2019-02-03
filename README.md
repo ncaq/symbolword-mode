@@ -1,3 +1,5 @@
+[![MELPA](https://melpa.org/packages/symbolword-mode-badge.svg)](https://melpa.org/#/symbolword-mode)
+
 # symbolword-mode
 
 Make Emacs' word judgment moderate.
